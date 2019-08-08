@@ -1,13 +1,17 @@
 <template>
     <div class="region">
-        <!--<input class="search-input" type="text"-->
-        <!--placeholder="输入城市名或者拼音">-->
         <div class="wrapper">
             <router-link to="/city/in">
-                <button class="in btn-active">境内</button>
+                <button class="in" @click="toggleIn"
+                        :class="{'btn-active': isIn}"
+                >境内
+                </button>
             </router-link>
             <router-link to="/city/out">
-                <button class="out">境外·港澳台</button>
+                <button class="out" @click="toggleOut"
+                        :class="{'btn-active': !isIn}"
+                >境外·港澳台
+                </button>
             </router-link>
         </div>
     </div>
@@ -15,12 +19,26 @@
 
 <script>
     export default {
-        name: "CitySearch"
+        name: "CitySearch",
+        data() {
+            return {
+                isIn: true,
+            }
+        },
+        methods: {
+            toggleIn() {
+                this.isIn = true
+            },
+            toggleOut() {
+                this.isIn = false
+            },
+        }
     }
 </script>
 
 <style scoped lang="scss">
     @import '../../../assets/styles/vars';
+
     .region {
         height: .5rem;
         padding-bottom: .1rem;

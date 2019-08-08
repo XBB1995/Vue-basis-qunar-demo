@@ -16,6 +16,7 @@ export default new Router({
         {
             path: '/city',
             component: City,
+            redirect: '/city/in',
             children: [
                 {
                     path: 'in',
@@ -26,6 +27,6 @@ export default new Router({
                     component: CityOutList
                 },
             ]
-        }
+        },
     ]
 })
