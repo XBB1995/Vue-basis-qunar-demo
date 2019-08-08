@@ -1,6 +1,6 @@
 <template>
     <div class="home">
-        <home-header :city="city"></home-header>
+        <home-header></home-header>
         <home-swiper :list="swiperList"></home-swiper>
         <home-icons :list="iconList"></home-icons>
         <div class="tools-box">
@@ -27,19 +27,22 @@
     import HomeWeekend from './components/Weekend.vue'
     import HomeFooter from './components/Footer.vue'
     import axios from 'axios'
+    import {mapState} from 'vuex'
 
     export default {
         name: "Home",
         data() {
             return {
-                city: '',
                 swiperList: [],
                 iconList: [],
                 recommendList: [],
-                weekendList: []
+                weekendList: [],
+                lastCity: ''
             }
         },
         components: {
+            // 异步加载 仅当app.js较大时才有性能提升
+            // HomeHeader: () => import('./components/Header.vue'),
             HomeHeader,
             HomeSwiper,
             HomeIcons,
@@ -47,27 +50,34 @@
             HomeWeekend,
             HomeFooter
         },
+        computed: {
+            ...mapState(['city'])
+        },
         methods: {
             getHomeInfo() {
+                this.lastCity = this.city
                 axios
-                    .get('/mock/index.json')
+                    .get('/mock/index.json?city=' + this.city)
                     .then(this.getHomeInfoSucc)
             },
             getHomeInfoSucc(res) {
                 res = res.data
                 if (res.ret && res.data) {
                     const data = res.data
-                    this.city = data.city
                     this.swiperList = data.swiperList
                     this.iconList = data.iconList
                     this.recommendList = data.recommendList
                     this.weekendList = data.weekendList
                 }
-                // console.log(res);
-            }
+            },
         },
         mounted() {
             this.getHomeInfo()
+        },
+        activated() {
+            if (this.lastCity !== this.city) {
+                this.getHomeInfo()
+            }
         }
     }
 </script>

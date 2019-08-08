@@ -3,36 +3,54 @@
         <div class="title border-topbottom">
             <slot></slot>
         </div>
-        <div class="list"  v-if="!cityAlone">
+        <div class="list" v-if="!cityNoData">
             <ul class="city-ul">
                 <li class="city-li" v-for="item of list"
-                    :key="item.id"
-                >{{item.name}}</li>
+                    :key="item.id" @click="handleClick(item.name)"
+                >{{item.name}}
+                </li>
             </ul>
         </div>
         <div v-else class="cityPos">
             <span class="iconfont iconpos">&#xe672;</span>
-            {{list[0].name}}
+            {{currentCity}}
         </div>
     </div>
 </template>
 
 <script>
+    import {mapState, mapMutations} from 'vuex'
+
     export default {
         name: "List",
         props: {
             list: Array
         },
+        methods: {
+            handleClick(city) {
+                // this.$store.commit('changeCity', city)
+                this.changeCity(city)
+                this.$router.push('/')
+            },
+            ...mapMutations(['changeCity'])
+            // ...mapActions(['changeCity'])
+        },
         computed: {
-            cityAlone() {
-                return this.list.length === 1?true:false
-            }
+            cityNoData() {
+                return this.list ? false : true
+            },
+            // ...mapState(['city']),
+            // 可传递对象
+            ...mapState({
+                currentCity: 'city'
+            })
         }
     }
 </script>
 
 <style scoped lang="scss">
     @import '../../../../assets/styles/vars';
+
     .area {
         .title {
             height: .44rem;
@@ -63,6 +81,7 @@
                     height: 100%;
                     border-left: .02rem solid #ddd;
                     border-right: .02rem solid #ddd;
+                    z-index: -1;
                 }
                 &:after {
                     content: '';
@@ -72,6 +91,7 @@
                     width: 25%;
                     height: 100%;
                     border-left: .02rem solid #ddd;
+                    z-index: -1;
                 }
                 .city-li {
                     width: 25%;

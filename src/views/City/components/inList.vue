@@ -1,7 +1,7 @@
 <template>
     <div class="inlist" ref="wrapper">
         <div class="list-wrapper">
-            <list :list="CurrentPos">当前城市</list>
+            <list>当前城市</list>
             <list :list="hotCities">热门城市</list>
             <div class="area">
                 <div class="title border-topbottom">
@@ -30,12 +30,6 @@
         name: "CityList",
         data() {
             return {
-                CurrentPos: [
-                    {
-                        id: 1,
-                        name: '北京'
-                    }
-                ],
                 cities: {},
                 hotCities: [],
                 letter: ''

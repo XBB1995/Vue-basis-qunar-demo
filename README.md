@@ -107,3 +107,6 @@ axios.get('/api/index.json')的请求，则需要在vue.config.js文件中配置
           //触发点击或者移动事件
 
 +. 搜索框的编写 => 同样巨坑 需要结合v-show和BScroll及computed 注意绝对定位的使用
+
+
+## 真机测试  还是无法成功 原因未知

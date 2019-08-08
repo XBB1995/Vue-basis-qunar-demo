@@ -9,7 +9,8 @@
             <div class="search-content" v-show="keyword" ref="search">
                 <ul>
                     <li v-for="item of list" :key="item.id"
-                    class="search-item border-bottom">
+                    class="search-item border-bottom" @click="handleClick(item.name)"
+                    >
                         {{item.name}}--{{item.spell}}
                     </li>
                     <li class="border-bottom search-item" v-if="hasNoData">
@@ -27,6 +28,7 @@
 <script>
     import axios from 'axios'
     import BScroll from 'better-scroll'
+    import {mapActions} from 'vuex'
 
     export default {
         name: "CityHeader",
@@ -49,7 +51,13 @@
                     const data = res.data
                     this.cities = data.cities
                 }
-            }
+            },
+            handleClick(city) {
+                this.changeCity(city)
+                this.keyword = ''
+                this.$router.push('/')
+            },
+            ...mapActions(['changeCity'])
         },
         mounted() {
             this.getCityInfo()

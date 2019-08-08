@@ -4,6 +4,7 @@ import Home from './views/Home/Home.vue'
 import City from './views/City/City.vue'
 import List from './views/City/components/inList.vue'
 import CityOutList from './views/City/components/outList.vue'
+import Detail from './views/Detail/Detail.vue'
 
 Vue.use(Router)
 
@@ -28,5 +29,12 @@ export default new Router({
                 },
             ]
         },
-    ]
+        {
+            path: '/detail/:id',
+            component: Detail
+        }
+    ],
+    scrollBehavior (to, from, savedPosition) {
+        return { x: 0, y: 0}
+    }
 })
