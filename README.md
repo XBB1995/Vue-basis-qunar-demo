@@ -38,19 +38,24 @@
    3. created后还是虚拟DOM 被挂载前$el属性还不存在 mounted挂载后也不能保证组件已经在document中（在测试用mounted后$el也同样不存在）
 6. 总线Bus 非Vuex的组件间传值 一种类似发布订阅模式的机制
    1.  Vue.prototype.bus = new Vue() 在显式原型上绑定一个单例
-   2. 使用this.bus.$emit('change', arguments) 传递事件
-   3. 使用this.bus.$on('change', arguments) 在组件挂载时实现事件监听
+   2. 使用this.bus.$emit('event', arguments) 通过自定义的事件event传递参数
+   3. 使用this.bus.$on('event', function) 在组件挂载时实现event事件监听
    
            methods: {
                handleClick() {
-                   this.bus.$emit('change', this.selfContent)
+                   this.bus.$emit('event', this.selfContent)
                }
            },
            mounted() {
                let that = this
-               this.bus.$on('change', function (msg) {
+               this.bus.$on('event', function (msg) {
                    that.selfContent = msg
                })
+           }
+   4. 清除总线bus
+   
+           beforeDestory() {
+               this.bus.$off('event)
            }
 7. 动态组件 使用:is='componentName'来决定组件 结合keep-alive使用
 8. 组件接收父组件传递的数据时，可进行组件参数校验
