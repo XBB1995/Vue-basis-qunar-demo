@@ -1,4 +1,69 @@
-# qunar
+# Vue basis && qunar demo
+
+## 主要收获
+1. 插槽的使用及应用 如具名插槽、作用域插槽
+   1. demo中在实现城市列表页时，将标题作为内容传入插槽
+   2. 使用插槽实现动画效果对组件的包裹
+2. Vuex中的辅助函数
+   1. mapGetters mapState 映射生成计算属性
+   2. mapMutations mapActions 映射生成函数
+   <br> 
+   相关使用方法:
+   
+           import {mapState, mapGetters, mapActions, mapMutations} from 'vuex'
+           
+           computed: {
+               ...mapState(['city']),
+               ...mapGetters(['doubleCity'])
+           },
+           // 将this.$store.state.city映射到city上
+           // 可通过this.city直接调用，相当于定义了一个组件内的数据
+           
+           methods: {
+               handleClick(city) {
+                   // 原来的方式 commit dispatch
+                   // this.$store.commit('changeCity', city)
+                   // this.$store.dispatch('changeCity', city)
+                   this.changeCity(city)
+               },
+               ...mapMutations(['changeCity'])
+               // ...mapActions(['changeCity'])
+           },
+           
+3. computed属性的缓存特性，且在挂载Mounted前调用，组件尚未渲染成功时无法计算，无法执行异步。 
+4. watch监听到属性变化才触发 可以执行异步操作
+5. keep-alive标签包裹组件会为组件增加两个生命周期钩子函数
+   1. activated 组件被激活时调用
+   2. deactivated 组件被移除时调用
+   3. created后还是虚拟DOM 被挂载前$el属性还不存在 mounted挂载后也不能保证组件已经在document中（在测试用mounted后$el也同样不存在）
+6. 总线Bus 非Vuex的组件间传值 一种类似发布订阅模式的机制
+   1.  Vue.prototype.bus = new Vue() 在显式原型上绑定一个单例
+   2. 使用this.bus.$emit('change', arguments) 传递事件
+   3. 使用this.bus.$on('change', arguments) 在组件挂载时实现事件监听
+   
+           methods: {
+               handleClick() {
+                   this.bus.$emit('change', this.selfContent)
+               }
+           },
+           mounted() {
+               let that = this
+               this.bus.$on('change', function (msg) {
+                   that.selfContent = msg
+               })
+           }
+7. 动态组件 使用:is='componentName'来决定组件 结合keep-alive使用
+8. 组件接收父组件传递的数据时，可进行组件参数校验
+   
+           props: {
+               name: {
+                   type: String,
+                   required: true,
+                   validator: function (value) {
+                       return value >= 0 && value <= 130;
+                   }
+               }
+           }
 
 ## 开发过程中遇到的问题及解决方式
 
